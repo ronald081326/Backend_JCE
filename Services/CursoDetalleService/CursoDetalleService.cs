@@ -8,11 +8,19 @@ namespace UniversidadJCE1.Services.CursoService
         private static List<CursoDetalle> Cursodetalle = new List<CursoDetalle>
         {
           new CursoDetalle
-          { CursoId = 1,
-            EstudianteId = 2
-          }
+          { CursoDetalleId = 1,
+             CursoId = 1,
+             EstudianteId = 1,
+          },
+          new CursoDetalle
+            {
+                CursoDetalleId = 12,
+                CursoId = 12,
+                EstudianteId = 12,
+            }
         };
-        public List<CursoDetalle> Addcurso(CursoDetalle detalle)
+
+        public List<CursoDetalle> Addcurso(CursoDetalle cursoDetalle)
         {
             throw new NotImplementedException();
         }
@@ -22,24 +30,12 @@ namespace UniversidadJCE1.Services.CursoService
             throw new NotImplementedException();
         }
 
-        public CursoDetalle Get(int Id)
+        public CursoDetalle GetById(int id)
         {
             throw new NotImplementedException();
         }
 
         public List<CursoDetalle> Updatecurso(CursoDetalle request)
-        {
-            var detalles = Cursodetalle.Find(p => p.CursoId == request.CursoId);
-            if (detalles == null)
-                return null;
-
-            detalles.CursoId = request.CursoId;
-            detalles.EstudianteId = request.EstudianteId;
-
-            return Cursodetalle;
-        }
-
-        List<CursoDetalle> ICursoDetalleService.Get(int Id)
         {
             throw new NotImplementedException();
         }

@@ -10,58 +10,75 @@ namespace UniversidadJCE1.Controllers
     {
         private static List<Profesores> Profesor = new List<Profesores>
         {
-            new Profesores {
+            new Profesores
+            {
                 ProfesorId = 1,
                 Nombre = "Dostin",
                 Apellido = "Santana",
-                Activo = "Yes"
+                 CursoId = 1,
+                Activo = true,
             },
-            new Profesores {
+            new Profesores
+            {
                 ProfesorId = 2,
                 Nombre = "Claudio",
-                Apellido = "Santana",
-                Activo = "Yes"
+                Apellido = "Ferreira",
+                CursoId = 2,
+                Activo =true,
             }
+
         };
 
         [HttpGet]
+
         public async Task<ActionResult<List<Profesores>>> Get()
+        { 
+          return Ok(Profesor);
+        }
+
+        [HttpGet("ID")]
+
+        public async Task<ActionResult<Profesores>> GetById(int id)
         {
+            var profesor = Profesor.Find(p => p.ProfesorId == id);
+            if (profesor == null)
+                return BadRequest("Profesor No encontrado.");
+              return Ok(Profesor);
+        }
+
+        
+        [HttpPost]
+
+        public async Task<ActionResult<List<Profesores>>> AddProfesor(Profesores profesores)
+        {
+            Profesor.Add(profesores);
             return Ok(Profesor);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<Profesores>> Get(int Id)
-        {
-            var profesor = Profesor.Find(p => p.ProfesorId == Id);
-            if (profesor == null)
-                return BadRequest("Profesor no encontrado.");
-            return Ok(profesor);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<List<Profesores>>> AddProfesor(Profesores profesor)
-        {
-            Profesor.Add(profesor);
-            return Ok(profesor);
-        }
 
         [HttpPut]
 
         public async Task<ActionResult<List<Profesores>>> UpdateProfesor(Profesores request)
         {
-            var profesor = Profesor.Find(p => p.ProfesorId == request.Id);
+            var profesor = Profesor.Find(p => p.ProfesorId == request.ProfesorId);
             if (profesor == null)
-                return BadRequest("Profesor no encontrado.");
+                return BadRequest("Profesor No encontrado.");
 
-            profesor.ProfesorId = request.Id;
+            profesor.ProfesorId = request.ProfesorId;
             profesor.Nombre = request.Nombre;
             profesor.Apellido = request.Apellido;
             profesor.Activo = request.Activo;
+            profesor.CursoId = request.CursoId;
 
-            return Ok(profesor);
+
+            return Ok(Profesor);
         }
-
 
     }
 }
+
+          
+
+       
+ 
+

@@ -1,14 +1,13 @@
-﻿using UniversidadJCE1.Controllers;
-using UniversidadJCE1.Models;
-using UniversidadJCE1.Services.ICursoService;
+﻿using UniversidadJCE1.Models;
 
 namespace UniversidadJCE1.Services.CursoService
 {
     public interface ICursoService
     {
         List<Curso> Get();
-        Curso Get(int Id);
-        List<Curso> Addcurso(Curso curso);
+        Curso GetById(int id);
+        List<Curso> Addcurso(Curso cursos);
         List<Curso> Updatecurso(Curso request);
+
     }
 }

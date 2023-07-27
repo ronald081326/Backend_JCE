@@ -1,69 +1,56 @@
-﻿using UniversidadJCE1.Controllers;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversidadJCE1.Context;
 using UniversidadJCE1.Models;
-using UniversidadJCE1.Services.ProfesoresService;
 
 namespace UniversidadJCE1.Services.ProfesoresService
 {  
         public class EstudianteService : IEstudianteService
         {
-        private static List<Estudiantes> Estudiante = new List<Estudiantes>
+        private readonly DataContext _context;
+
+        public EstudianteService(DataContext context)
         {
-          new Estudiantes
-          { EstudianteId = 1,
-            Nombre = "Dostin",
-            Apellido = "Santana",
-            FechaNacimiento = new DateTime(),
-            Activo = "Yes"
-          },
-           new Estudiantes
-           { EstudianteId = 2,
-             Nombre = "Claudio",
-             Apellido = "Ferreira",
-             FechaNacimiento = new DateTime(),
-             Activo = "No"
-           }
-        };
-            public List<Estudiantes> Get(Estudiantes Estudiante)
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<Estudiantes> AddEstudiante(Estudiantes Estudiante)
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<Estudiantes> Get()
-            {
-                throw new NotImplementedException();
-            }
-
-            public Estudiantes Get(int Id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<Estudiantes> UpdateEstudiante(Estudiantes request)
-            {
-                var estudiante = Estudiante.Find(c => c.EstudianteId == request.Id);
-                if (estudiante == null)
-                    return null;
-
-                estudiante.EstudianteId = request.EstudianteId;
-                estudiante.Nombre = request.Nombre;
-                estudiante.Apellido = request.Apellido;
-                estudiante.FechaNacimiento = request.FechaNacimiento;
-                
-                return Estudiante;
-            }
-            List<Estudiantes> IEstudianteService.Get()
-            {
-                throw new NotImplementedException();
-            }
-             Estudiantes IEstudianteService.Get(int Id)
-             {
-                 throw new NotImplementedException();
-             }
+            _context = context;
         }
+
+        public async Task<List<Estudiantes>> AddEstudiante(Estudiantes estudiantes)
+        {
+            _context.Estudiantes.Add(estudiantes);
+            await _context.SaveChangesAsync();
+            return await _context.Estudiantes.ToListAsync();
+        }
+
+        public async Task<List<Estudiantes>> Get()
+        {
+            var students = await _context.Estudiantes.ToListAsync();
+            return students;
+        }
+
+        public async Task<Estudiantes> GetById(int id)
+        {
+            var students = await _context.Estudiantes.FindAsync(id);
+            if (students is null)
+                return null;
+
+            return students;
+        }
+
+        public async Task<List<Estudiantes>> UpdateEstudiante(int id,Estudiantes request)
+        {
+            var student = await _context.Estudiantes.FindAsync(id);
+            if (student is null)
+                return null;
+
+            student.Nombre = request.Nombre;
+            student.Apellido = request.Apellido;
+            student.Activo = request.Activo;
+            student.FechaNacimiento = request.FechaNacimiento;
+            student.CursoId = request.CursoId;
+
+            await _context.SaveChangesAsync();
+
+            return await _context.Estudiantes.ToListAsync();
+        }
+    }
 }
 

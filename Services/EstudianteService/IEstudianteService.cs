@@ -4,9 +4,9 @@ namespace UniversidadJCE1.Services.ProfesoresService
 {
     public interface IEstudianteService
     {
-        List<Estudiantes> Get();
-        Estudiantes Get(int Id);
-        List<Estudiantes> AddEstudiante(Estudiantes Estudiante);
-        List<Estudiantes> UpdateEstudiante(Estudiantes request);
+        Task<List<Estudiantes>> Get();
+        Task<Estudiantes> GetById(int id);
+        Task<List<Estudiantes>> AddEstudiante(Estudiantes estudiantes);
+        Task<List<Estudiantes>> UpdateEstudiante(int id, Estudiantes request);
     }
 }
