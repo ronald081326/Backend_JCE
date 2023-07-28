@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UniversidadJCE1.Context;
 using UniversidadJCE1.Models;
+using UniversidadJCE1.Services.CursoService;
+using UniversidadJCE1.Services.ICursoService;
+using UniversidadJCE1.Services.ProfesoresService;
 
 namespace UniversidadJCE1.Controllers
 {
@@ -8,38 +13,28 @@ namespace UniversidadJCE1.Controllers
     [ApiController]
     public class CursoDetalleController : ControllerBase
     {
-        private static List<CursoDetalle> Detalle = new List<CursoDetalle>
+        private readonly CursoDetalleService _CursoDetalleService;
+
+        public CursoDetalleController(CursoDetalleService CursoDetalleService)
         {
-            new CursoDetalle
-            {
-                CursoDetalleId = 1,
-                CursoId = 1,
-                EstudianteId = 1,
-            },
-            new CursoDetalle
-            {
-                CursoDetalleId = 12,
-                CursoId = 12,
-                EstudianteId = 12,
-            }
-
-        };
-
+            _CursoDetalleService = CursoDetalleService;
+        }
         [HttpGet]
 
         public async Task<ActionResult<List<CursoDetalle>>> Get()
         {
-            return Ok(Detalle);
+            return await _CursoDetalleService.Get();
         }
 
-        [HttpGet("ID")]
+        [HttpGet("{id}")]
 
         public async Task<ActionResult<CursoDetalle>> GetById(int id)
         {
-            var cursoDetalle = Detalle.Find(p => p.CursoDetalleId == id);
-            if (cursoDetalle == null)
-                return BadRequest("Aun no hay Detalles de este Curso.");
-            return Ok(Detalle);
+            var detalle = await _CursoDetalleService.GetById(id);
+            if (detalle is null)
+                return NotFound("Detalle del Curso no encontrado");
+
+            return Ok(detalle);
         }
 
 
@@ -47,27 +42,21 @@ namespace UniversidadJCE1.Controllers
 
         public async Task<ActionResult<List<CursoDetalle>>> Addcurso(CursoDetalle cursoDetalle)
         {
-            Detalle.Add(cursoDetalle);
-            return Ok(Detalle);
+            var detalle = await _CursoDetalleService.Addcurso(cursoDetalle);
+            return Ok(detalle);
         }
 
 
-        [HttpPut]
+        [HttpPut("{id}")]
 
-        public async Task<ActionResult<List<CursoDetalle>>> Updatecurso(CursoDetalle request)
+        public async Task<ActionResult<List<CursoDetalle>>> Updatecurso(int id, CursoDetalle request)
         {
-            var cursoDetalle = Detalle.Find(p => p.EstudianteId == request.EstudianteId);
-            if (cursoDetalle == null)
-                return BadRequest("Aun no hay Detalles de este Curso.");
+            var detalle = await _CursoDetalleService.Updatecurso(id, request);
+            if (detalle is null)
+                return NotFound("Detalle del Curso no encontrado");
 
-            cursoDetalle.EstudianteId = request.EstudianteId;
-            cursoDetalle.CursoDetalleId = request.CursoDetalleId;
-            cursoDetalle.CursoId = request.CursoId;
-            cursoDetalle.EstudianteId = request.EstudianteId;    
-
-
-
-            return Ok(Detalle);
+            return Ok(detalle);
         }
+
     }
 }

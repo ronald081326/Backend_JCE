@@ -1,41 +1,73 @@
-﻿using UniversidadJCE1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversidadJCE1.Context;
+using UniversidadJCE1.Models;
 using UniversidadJCE1.Services.ICursoService;
 
 namespace UniversidadJCE1.Services.CursoService
 {
     public class CursoDetalleService : ICursoDetalleService
     {
-        private static List<CursoDetalle> Cursodetalle = new List<CursoDetalle>
-        {
-          new CursoDetalle
-          { CursoDetalleId = 1,
-             CursoId = 1,
-             EstudianteId = 1,
-          },
-          new CursoDetalle
-            {
-                CursoDetalleId = 12,
-                CursoId = 12,
-                EstudianteId = 12,
-            }
-        };
+       private readonly DataContext _context;
 
-        public List<CursoDetalle> Addcurso(CursoDetalle cursoDetalle)
+        public CursoDetalleService(DataContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public object Detalle => throw new NotImplementedException();
+
+        public async Task<List<CursoDetalle>> Addcurso(CursoDetalle cursoDetalle)
+        {
+            _context.CursoDetalles.Add(cursoDetalle);
+            await _context.SaveChangesAsync();
+            return await _context.CursoDetalles.ToListAsync();
         }
 
-        public List<CursoDetalle> Get()
+        public async Task<List<CursoDetalle>> Get()
         {
-            throw new NotImplementedException();
+            var cursoDetalle = await _context.CursoDetalles.ToListAsync();
+            return cursoDetalle;
         }
 
-        public CursoDetalle GetById(int id)
+        public async Task<CursoDetalle> GetById(int id)
         {
-            throw new NotImplementedException();
+            var cursoDetalle = await _context.CursoDetalles.FindAsync(id);
+            if (cursoDetalle == null)
+                return null;
+
+            return cursoDetalle;
+        }
+
+        public async Task<List<CursoDetalle>> Updatecurso(int id, CursoDetalle request)
+        {
+            var cursoDetalle = await _context.CursoDetalles.FindAsync(id);
+            if (cursoDetalle == null)
+                return null;
+
+            cursoDetalle.CursoDetalleId = id;
+            cursoDetalle.CursoId = request.CursoId;
+            cursoDetalle.EstudianteId = request.EstudianteId;
+
+            await _context.SaveChangesAsync();
+
+            return await _context.CursoDetalles.ToListAsync();
         }
 
         public List<CursoDetalle> Updatecurso(CursoDetalle request)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<CursoDetalle> ICursoDetalleService.Addcurso(CursoDetalle cursoDetalle)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<CursoDetalle> ICursoDetalleService.Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        CursoDetalle ICursoDetalleService.GetById(int id)
         {
             throw new NotImplementedException();
         }

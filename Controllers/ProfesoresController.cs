@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniversidadJCE1.Models;
+using UniversidadJCE1.Services.IProfesoresServices;
 
 namespace UniversidadJCE1.Controllers
 {
@@ -8,77 +8,53 @@ namespace UniversidadJCE1.Controllers
     [ApiController]
     public class ProfesoresController : ControllerBase
     {
-        private static List<Profesores> Profesor = new List<Profesores>
+        private readonly ProfesoresService _ProfesoresService;
+
+        public ProfesoresController(ProfesoresService ProfesoresService)
         {
-            new Profesores
-            {
-                ProfesorId = 1,
-                Nombre = "Dostin",
-                Apellido = "Santana",
-                 CursoId = 1,
-                Activo = true,
-            },
-            new Profesores
-            {
-                ProfesorId = 2,
-                Nombre = "Claudio",
-                Apellido = "Ferreira",
-                CursoId = 2,
-                Activo =true,
-            }
-
-        };
-
+            _ProfesoresService = ProfesoresService;
+        }
         [HttpGet]
 
         public async Task<ActionResult<List<Profesores>>> Get()
-        { 
-          return Ok(Profesor);
+        {
+            return await _ProfesoresService.Get();
         }
 
-        [HttpGet("ID")]
+        [HttpGet("{id}")]
 
         public async Task<ActionResult<Profesores>> GetById(int id)
         {
-            var profesor = Profesor.Find(p => p.ProfesorId == id);
-            if (profesor == null)
-                return BadRequest("Profesor No encontrado.");
-              return Ok(Profesor);
+            var profesor = await _ProfesoresService.GetById(id);
+            if (profesor is null)
+                return NotFound("Profesor not found");
+
+            return Ok(profesor);
         }
 
-        
+
         [HttpPost]
 
         public async Task<ActionResult<List<Profesores>>> AddProfesor(Profesores profesores)
         {
-            Profesor.Add(profesores);
-            return Ok(Profesor);
+            var profesor = await _ProfesoresService.AddProfesor(profesores);
+            return Ok(profesores);
         }
 
 
-        [HttpPut]
+        [HttpPut("{id}")]
 
-        public async Task<ActionResult<List<Profesores>>> UpdateProfesor(Profesores request)
+        public async Task<ActionResult<List<Profesores>>> UpdateProfesor(int id, Profesores request)
         {
-            var profesor = Profesor.Find(p => p.ProfesorId == request.ProfesorId);
-            if (profesor == null)
-                return BadRequest("Profesor No encontrado.");
+            var profesor = await _ProfesoresService.UpdateProfesor(id, request);
+            if (profesor is null)
+                return NotFound("Profesor no actualizado.");
 
-            profesor.ProfesorId = request.ProfesorId;
-            profesor.Nombre = request.Nombre;
-            profesor.Apellido = request.Apellido;
-            profesor.Activo = request.Activo;
-            profesor.CursoId = request.CursoId;
-
-
-            return Ok(Profesor);
+            return Ok(profesor);
+           
         }
 
     }
 }
 
-          
-
-       
- 
 

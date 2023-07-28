@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UniversidadJCE1.Context;
 using UniversidadJCE1.Models;
 using UniversidadJCE1.Services.ProfesoresService;
 
@@ -48,7 +51,7 @@ namespace UniversidadJCE1.Controllers
         {
             var result = await _estudianteService.UpdateEstudiante(id, request);
             if (result is null)
-                return NotFound("student not updated");
+                return NotFound("Estudiante no actualizado.");
 
             return Ok(result);
             /*

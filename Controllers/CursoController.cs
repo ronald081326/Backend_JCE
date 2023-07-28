@@ -1,79 +1,64 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UniversidadJCE1.Context;
 using UniversidadJCE1.Models;
+using UniversidadJCE1.Services.CursoService;
+using UniversidadJCE1.Services.ICursoService;
 
 namespace UniversidadJCE1.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Curso")]
     [ApiController]
     public class CursoController : ControllerBase
     {
-        private static List<Curso> curso = new List<Curso>
+        private readonly CursoService _CursoService;
+
+        public CursoController(CursoService CursoService)
         {
-            new Curso
-            {
-                CursoId = 1,
-                Descripcion = "Software",
-                Fecha = new DateTime(26, 07, 2023),
-                ProfesorId = 1,
-                CursoDetalleId = 1,
-                EstudianteId = 1,
-            },
-            new Curso
-            {
-                CursoId = 2,
-                Descripcion = "db",
-                Fecha = new DateTime(26, 07, 2023),
-                ProfesorId = 2,
-                CursoDetalleId = 2,
-                EstudianteId = 2,
-            }
-
-        };
-
+            _CursoService = CursoService;
+        }
         [HttpGet]
 
         public async Task<ActionResult<List<Curso>>> Get()
         {
-            return Ok(curso);
+            return await _CursoService.Get();
         }
 
-        [HttpGet("ID")]
+        [HttpGet("{id}")]
 
-        public async Task<ActionResult<Curso>> GetById(int id)
+        public async Task<ActionResult<Profesores>> GetById(int id)
         {
-            var cursos = curso.Find(p => p.CursoId == id);
-            if (cursos == null)
-                return BadRequest("Aun no hay Detalles de este Curso.");
-            return Ok(curso);
+            var cursos = await _CursoService.GetById(id);
+            if (cursos is null)
+                return NotFound("Curso No encontrado.");
+
+            return Ok(cursos);
         }
 
 
         [HttpPost]
 
-        public async Task<ActionResult<List<Curso>>> Addcurso(Curso cursos)
+        public async Task<ActionResult<List<Curso>>> Addcurso(Curso curso)
         {
-            curso.Add(cursos);
-            return Ok(curso);
+            var cursos = await _CursoService.Addcurso(curso);
+            return Ok(cursos);
         }
 
 
-        [HttpPut]
+        [HttpPut("{id}")]
 
-        public async Task<ActionResult<List<Curso>>> Updatecurso(Curso request)
+        public async Task<ActionResult<List<Curso>>> Updatecurso(int id, Curso request)
         {
-            var cursos = curso.Find(p => p.CursoId == request.CursoId);
-            if (cursos== null)
-                return BadRequest("Aun no hay Detalles de este Curso.");
+            var cursos = await _CursoService.Updatecurso(id, request);
+            if (cursos is null)
+                return NotFound("Curso No encontrado.");
 
-            cursos.CursoId = request.CursoId;
-            cursos.Descripcion = request.Descripcion;
-            cursos.Fecha = request.Fecha;
-            cursos.ProfesorId = request.ProfesorId;
-            cursos.CursoDetalleId = request.CursoDetalleId;
-            cursos.EstudianteId = request.EstudianteId;
+            return Ok(cursos);
 
-            return Ok(curso);
         }
+
     }
 }
+
+

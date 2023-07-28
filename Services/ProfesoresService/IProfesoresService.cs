@@ -1,4 +1,6 @@
 ﻿using UniversidadJCE1.Models;
+using UniversidadJCE1.Controllers;
+using UniversidadJCE1.Services;
 
 namespace UniversidadJCE1.Services.ProfesoresService
 {

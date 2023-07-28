@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Services;
 using UniversidadJCE1.Context;
 using UniversidadJCE1.Services.CursoService;
 using UniversidadJCE1.Services.ICursoService;
 using UniversidadJCE1.Services.ProfesoresService;
+using UniversidadJCE1.Services.IProfesoresServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
