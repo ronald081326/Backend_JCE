@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Context;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniversidadJCE1.Models;
 using UniversidadJCE1.Services.ProfesoresService;
 
@@ -17,32 +14,31 @@ namespace UniversidadJCE1.Controllers
         {
             _estudianteService = estudianteService;
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<ActionResult<List<Estudiantes>>> Get()
         {
             return await _estudianteService.Get();
+        }
+
+        [HttpPost]
+        public async  Task<ActionResult<List<Estudiantes>>> AddEstudiante(Estudiantes  newestudiantes)
+        {
+            var estudiantes = await _estudianteService.AddEstudiante(newestudiantes);
+            return Ok(estudiantes);
         }
 
         [HttpGet("{id}")]
 
         public async Task<ActionResult<Estudiantes>> GetById(int id)
         {
-            var result = await _estudianteService.GetById(id);
+            var result = await  _estudianteService.GetById(id);
             if (result is null)
-                return NotFound("student not found");
+                return NotFound("Estudiante  no encontrado");
 
             return Ok(result);
         }
 
-
-        [HttpPost]
-
-        public async Task<ActionResult<List<Estudiantes>>> AddEstudiante(Estudiantes estudiantes)
-        {
-            var result = await _estudianteService.AddEstudiante(estudiantes);
-            return Ok(result);
-        }
 
 
         [HttpPut("{id}")]
@@ -54,20 +50,7 @@ namespace UniversidadJCE1.Controllers
                 return NotFound("Estudiante no actualizado.");
 
             return Ok(result);
-            /*
-            var estudiantes = Estudiante.Find(p => p.EstudianteId == request.EstudianteId);
-            if (estudiantes == null)
-                return BadRequest("Estudiante No encontrado.");
 
-            estudiantes.EstudianteId = request.EstudianteId;
-            estudiantes.Nombre = request.Nombre;
-            estudiantes.Apellido = request.Apellido;    
-            estudiantes.FechaNacimiento = request.FechaNacimiento;
-            estudiantes.CursoId = request.CursoId;
-            estudiantes.Activo = request.Activo;
-
-
-            return Ok(Estudiante);*/
         }
 
     }

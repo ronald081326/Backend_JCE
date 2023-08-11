@@ -6,27 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace UniversidadJCE1.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Profesores",
-                columns: table => new
-                {
-                    ProfesorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Activo = table.Column<bool>(type: "bit", nullable: false),
-                    CursoId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Profesores", x => x.ProfesorId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Cursos",
                 columns: table => new
@@ -35,7 +19,6 @@ namespace UniversidadJCE1.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProfesoresProfesorId = table.Column<int>(type: "int", nullable: true),
                     ProfesorId = table.Column<int>(type: "int", nullable: false),
                     CursoDetalleId = table.Column<int>(type: "int", nullable: false),
                     EstudianteId = table.Column<int>(type: "int", nullable: false)
@@ -43,11 +26,6 @@ namespace UniversidadJCE1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cursos", x => x.CursoId);
-                    table.ForeignKey(
-                        name: "FK_Cursos_Profesores_ProfesoresProfesorId",
-                        column: x => x.ProfesoresProfesorId,
-                        principalTable: "Profesores",
-                        principalColumn: "ProfesorId");
                 });
 
             migrationBuilder.CreateTable(
@@ -67,6 +45,28 @@ namespace UniversidadJCE1.Migrations
                     table.PrimaryKey("PK_Estudiantes", x => x.EstudianteId);
                     table.ForeignKey(
                         name: "FK_Estudiantes_Cursos_CursoId",
+                        column: x => x.CursoId,
+                        principalTable: "Cursos",
+                        principalColumn: "CursoId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Profesores",
+                columns: table => new
+                {
+                    ProfesorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    CursoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Profesores", x => x.ProfesorId);
+                    table.ForeignKey(
+                        name: "FK_Profesores_Cursos_CursoId",
                         column: x => x.CursoId,
                         principalTable: "Cursos",
                         principalColumn: "CursoId",
@@ -95,7 +95,8 @@ namespace UniversidadJCE1.Migrations
                         name: "FK_CursoDetalles_Estudiantes_EstudianteId",
                         column: x => x.EstudianteId,
                         principalTable: "Estudiantes",
-                        principalColumn: "EstudianteId");
+                        principalColumn: "EstudianteId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -106,17 +107,16 @@ namespace UniversidadJCE1.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CursoDetalles_EstudianteId",
                 table: "CursoDetalles",
-                column: "EstudianteId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cursos_ProfesoresProfesorId",
-                table: "Cursos",
-                column: "ProfesoresProfesorId");
+                column: "EstudianteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Estudiantes_CursoId",
                 table: "Estudiantes",
+                column: "CursoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Profesores_CursoId",
+                table: "Profesores",
                 column: "CursoId",
                 unique: true);
         }
@@ -128,13 +128,13 @@ namespace UniversidadJCE1.Migrations
                 name: "CursoDetalles");
 
             migrationBuilder.DropTable(
+                name: "Profesores");
+
+            migrationBuilder.DropTable(
                 name: "Estudiantes");
 
             migrationBuilder.DropTable(
                 name: "Cursos");
-
-            migrationBuilder.DropTable(
-                name: "Profesores");
         }
     }
 }

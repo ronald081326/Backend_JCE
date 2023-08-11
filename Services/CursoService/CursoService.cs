@@ -15,8 +15,6 @@ public class CursoService : ICursoService
       _context = context;
     }
 
-    public object Detalle => throw new NotImplementedException();
-
     public async Task<List<Curso>> Addcurso(Curso cursos)
     {
         _context.Cursos.Add(cursos);
@@ -30,7 +28,7 @@ public class CursoService : ICursoService
         return curso;
     }
 
-    public async Task<Curso> GetById(int id)
+    public async Task<Curso?> GetById(int id)
     {
         var curso = await _context.Cursos.FindAsync(id);
         if (curso is null)
@@ -39,7 +37,7 @@ public class CursoService : ICursoService
         return curso;
     }
 
-    public async Task<List<Curso>> Updatecurso(int id, Curso request)
+    public async Task<List<Curso>?> Updatecurso(int id, Curso request)
     {
         var curso = await _context.Cursos.FindAsync(id);
         if (curso is null)
@@ -55,25 +53,5 @@ public class CursoService : ICursoService
         await _context.SaveChangesAsync();
 
         return await _context.Cursos.ToListAsync();
-    }
-
-    public List<Curso> Updatecurso(Curso request)
-    {
-        throw new NotImplementedException();
-    }
-
-    List<Curso> ICursoService.Addcurso(Curso cursos)
-    {
-        throw new NotImplementedException();
-    }
-
-    List<Curso> ICursoService.Get()
-    {
-        throw new NotImplementedException();
-    }
-
-    Curso ICursoService.GetById(int id)
-    {
-        throw new NotImplementedException();
     }
 }

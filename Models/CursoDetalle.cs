@@ -4,7 +4,6 @@ namespace UniversidadJCE1.Models
 {
     public class CursoDetalle
     {
-        [Key]
         public int CursoDetalleId { get; set; }
         public Curso? Curso { get; set; }
         public int CursoId { get; set; }

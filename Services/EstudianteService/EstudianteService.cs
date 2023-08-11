@@ -26,7 +26,7 @@ namespace UniversidadJCE1.Services.ProfesoresService
             return students;
         }
 
-        public async Task<Estudiantes> GetById(int id)
+        public async Task<Estudiantes?> GetById(int id)
         {
             var students = await _context.Estudiantes.FindAsync(id);
             if (students is null)
@@ -35,7 +35,8 @@ namespace UniversidadJCE1.Services.ProfesoresService
             return students;
         }
 
-        public async Task<List<Estudiantes>> UpdateEstudiante(int id,Estudiantes request)
+
+        public async Task<List<Estudiantes>?> UpdateEstudiante(int id,Estudiantes request)
         {
             var student = await _context.Estudiantes.FindAsync(id);
             if (student is null)
@@ -45,9 +46,8 @@ namespace UniversidadJCE1.Services.ProfesoresService
             student.Apellido = request.Apellido;
             student.Activo = request.Activo;
             student.FechaNacimiento = request.FechaNacimiento;
-            student.CursoId = request.CursoId;
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();                    
 
             return await _context.Estudiantes.ToListAsync();
         }

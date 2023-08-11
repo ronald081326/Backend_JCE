@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Context;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniversidadJCE1.Models;
-using UniversidadJCE1.Services.CursoService;
 using UniversidadJCE1.Services.ICursoService;
-using UniversidadJCE1.Services.ProfesoresService;
 
 namespace UniversidadJCE1.Controllers
 {
@@ -13,36 +8,35 @@ namespace UniversidadJCE1.Controllers
     [ApiController]
     public class CursoDetalleController : ControllerBase
     {
-        private readonly CursoDetalleService _CursoDetalleService;
+        private readonly ICursoDetalleService _CursoDetalleService;
 
-        public CursoDetalleController(CursoDetalleService CursoDetalleService)
+
+        public CursoDetalleController(ICursoDetalleService cursoDetalleService)
         {
-            _CursoDetalleService = CursoDetalleService;
+           
+            _CursoDetalleService = cursoDetalleService;
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<ActionResult<List<CursoDetalle>>> Get()
         {
             return await _CursoDetalleService.Get();
         }
 
-        [HttpGet("{id}")]
+        [HttpPost]
+        public async Task<ActionResult<List<CursoDetalle>>> Addcurso(CursoDetalle newcursoDetalle)
+        {
+            var cursoDetalle = await _CursoDetalleService.Addcurso(newcursoDetalle);
+            return Ok(_CursoDetalleService);
+        }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult<CursoDetalle>> GetById(int id)
         {
             var detalle = await _CursoDetalleService.GetById(id);
             if (detalle is null)
                 return NotFound("Detalle del Curso no encontrado");
 
-            return Ok(detalle);
-        }
-
-
-        [HttpPost]
-
-        public async Task<ActionResult<List<CursoDetalle>>> Addcurso(CursoDetalle cursoDetalle)
-        {
-            var detalle = await _CursoDetalleService.Addcurso(cursoDetalle);
             return Ok(detalle);
         }
 

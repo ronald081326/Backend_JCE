@@ -1,22 +1,44 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿global using Microsoft.EntityFrameworkCore;
 using UniversidadJCE1.Models;
-using UniversidadJCE1.Controllers;
-using System.Reflection.Metadata;
 
 namespace UniversidadJCE1.Context;
 
 public class DataContext : DbContext
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+    private const string ConnectionString = "Initial Catalog=UniversidadJdb;Server=LDEVELOPER24\\SQLEXPRESS;User=JCE\\Dostin_Santana;Encrypt=False;";
+                                            
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    {
+
+
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Estudiantes>()
-            .HasOne(e => e.CursoDetalles)
-            .WithOne(e => e.Estudiante)
-            .HasForeignKey<CursoDetalle>(e => e.EstudianteId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+        modelBuilder.Entity<Curso>()
+            .HasOne(c => c.Profesor)
+            .WithOne(p => p.Curso)
+            .HasForeignKey<Profesor>(p => p.CursoId)
+            .HasPrincipalKey<Curso>(c => c.CursoId);
+
+        modelBuilder.Entity<Curso>()
+                    .HasMany(c => c.Estudiantes)
+                    .WithOne(e => e.Curso)
+                    .HasForeignKey(e => e.CursoId)
+                    .HasPrincipalKey(c => c.CursoId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+
     }
-    public DbSet<Profesores> Profesores { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseSqlServer(ConnectionString);
+        
+
+    }
+
+    public DbSet<Profesor> Profesores { get; set; }
     public DbSet<Estudiantes> Estudiantes { get; set; }
     public DbSet<CursoDetalle> CursoDetalles { get; set; }
     public DbSet<Curso> Cursos { get; set; }

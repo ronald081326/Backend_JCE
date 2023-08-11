@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Context;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniversidadJCE1.Models;
 using UniversidadJCE1.Services.CursoService;
-using UniversidadJCE1.Services.ICursoService;
 
 namespace UniversidadJCE1.Controllers
 {
@@ -12,42 +8,37 @@ namespace UniversidadJCE1.Controllers
     [ApiController]
     public class CursoController : ControllerBase
     {
-        private readonly CursoService _CursoService;
+        private readonly ICursoService _CursoService;
 
-        public CursoController(CursoService CursoService)
+        public CursoController( ICursoService cursoService)
         {
-            _CursoService = CursoService;
+            _CursoService = cursoService;
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<ActionResult<List<Curso>>> Get()
         {
             return await _CursoService.Get();
         }
 
-        [HttpGet("{id}")]
+        [HttpPost]
+        public async Task<ActionResult<List<Curso>>> AddcursoAsync(Curso cursos)
+        {
+            var curso = await _CursoService.Addcurso(cursos);
+            return Ok(curso);
+        }
 
-        public async Task<ActionResult<Profesores>> GetById(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Curso>> GetById(int id)
         {
             var cursos = await _CursoService.GetById(id);
             if (cursos is null)
-                return NotFound("Curso No encontrado.");
+                return NotFound("Curso no encontrado.");
 
             return Ok(cursos);
         }
-
-
-        [HttpPost]
-
-        public async Task<ActionResult<List<Curso>>> Addcurso(Curso curso)
-        {
-            var cursos = await _CursoService.Addcurso(curso);
-            return Ok(cursos);
-        }
-
 
         [HttpPut("{id}")]
-
         public async Task<ActionResult<List<Curso>>> Updatecurso(int id, Curso request)
         {
             var cursos = await _CursoService.Updatecurso(id, request);
@@ -57,8 +48,9 @@ namespace UniversidadJCE1.Controllers
             return Ok(cursos);
 
         }
-
     }
 }
+
+
 
 

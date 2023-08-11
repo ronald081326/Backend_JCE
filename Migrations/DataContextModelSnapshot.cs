@@ -45,12 +45,7 @@ namespace UniversidadJCE1.Migrations
                     b.Property<int>("ProfesorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProfesoresProfesorId")
-                        .HasColumnType("int");
-
                     b.HasKey("CursoId");
-
-                    b.HasIndex("ProfesoresProfesorId");
 
                     b.ToTable("Cursos");
                 });
@@ -73,8 +68,7 @@ namespace UniversidadJCE1.Migrations
 
                     b.HasIndex("CursoId");
 
-                    b.HasIndex("EstudianteId")
-                        .IsUnique();
+                    b.HasIndex("EstudianteId");
 
                     b.ToTable("CursoDetalles");
                 });
@@ -104,13 +98,12 @@ namespace UniversidadJCE1.Migrations
 
                     b.HasKey("EstudianteId");
 
-                    b.HasIndex("CursoId")
-                        .IsUnique();
+                    b.HasIndex("CursoId");
 
                     b.ToTable("Estudiantes");
                 });
 
-            modelBuilder.Entity("UniversidadJCE1.Models.Profesores", b =>
+            modelBuilder.Entity("UniversidadJCE1.Models.Profesor", b =>
                 {
                     b.Property<int>("ProfesorId")
                         .ValueGeneratedOnAdd()
@@ -128,20 +121,15 @@ namespace UniversidadJCE1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProfesorId");
 
+                    b.HasIndex("CursoId")
+                        .IsUnique();
+
                     b.ToTable("Profesores");
-                });
-
-            modelBuilder.Entity("UniversidadJCE1.Models.Curso", b =>
-                {
-                    b.HasOne("UniversidadJCE1.Models.Profesores", "Profesores")
-                        .WithMany("Curso")
-                        .HasForeignKey("ProfesoresProfesorId");
-
-                    b.Navigation("Profesores");
                 });
 
             modelBuilder.Entity("UniversidadJCE1.Models.CursoDetalle", b =>
@@ -153,9 +141,9 @@ namespace UniversidadJCE1.Migrations
                         .IsRequired();
 
                     b.HasOne("UniversidadJCE1.Models.Estudiantes", "Estudiante")
-                        .WithOne("CursoDetalles")
-                        .HasForeignKey("UniversidadJCE1.Models.CursoDetalle", "EstudianteId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .WithMany()
+                        .HasForeignKey("EstudianteId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Curso");
@@ -166,8 +154,19 @@ namespace UniversidadJCE1.Migrations
             modelBuilder.Entity("UniversidadJCE1.Models.Estudiantes", b =>
                 {
                     b.HasOne("UniversidadJCE1.Models.Curso", "Curso")
-                        .WithOne("Estudiantes")
-                        .HasForeignKey("UniversidadJCE1.Models.Estudiantes", "CursoId")
+                        .WithMany("Estudiantes")
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+                });
+
+            modelBuilder.Entity("UniversidadJCE1.Models.Profesor", b =>
+                {
+                    b.HasOne("UniversidadJCE1.Models.Curso", "Curso")
+                        .WithOne("Profesor")
+                        .HasForeignKey("UniversidadJCE1.Models.Profesor", "CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -179,16 +178,8 @@ namespace UniversidadJCE1.Migrations
                     b.Navigation("CursoDetalle");
 
                     b.Navigation("Estudiantes");
-                });
 
-            modelBuilder.Entity("UniversidadJCE1.Models.Estudiantes", b =>
-                {
-                    b.Navigation("CursoDetalles");
-                });
-
-            modelBuilder.Entity("UniversidadJCE1.Models.Profesores", b =>
-                {
-                    b.Navigation("Curso");
+                    b.Navigation("Profesor");
                 });
 #pragma warning restore 612, 618
         }

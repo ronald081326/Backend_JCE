@@ -87,3 +87,5 @@ C:\Users\Dostin_santana\source\repos\UniversidadJCE1\UniversidadJCE1\obj\Debug\n
 C:\Users\Dostin_santana\source\repos\UniversidadJCE1\UniversidadJCE1\obj\Debug\net6.0\UniversidadJCE1.pdb
 C:\Users\Dostin_santana\source\repos\UniversidadJCE1\UniversidadJCE1\obj\Debug\net6.0\UniversidadJCE1.genruntimeconfig.cache
 C:\Users\Dostin_santana\source\repos\UniversidadJCE1\UniversidadJCE1\obj\Debug\net6.0\ref\UniversidadJCE1.dll
+C:\Users\Dostin_santana\source\repos\UniversidadJCE1\UniversidadJCE1\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Dostin_santana\source\repos\UniversidadJCE1\UniversidadJCE1\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

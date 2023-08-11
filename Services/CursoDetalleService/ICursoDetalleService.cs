@@ -6,9 +6,10 @@ namespace UniversidadJCE1.Services.ICursoService
 {
     public interface ICursoDetalleService
     {
-        List<CursoDetalle> Get();
-        CursoDetalle GetById(int id);
-        List<CursoDetalle> Addcurso(CursoDetalle cursoDetalle);
-        List<CursoDetalle> Updatecurso(CursoDetalle request);
+        Task<List<CursoDetalle>> Get();
+        Task<List<CursoDetalle>?> Addcurso(CursoDetalle cursoDetalle);
+        Task<CursoDetalle> GetById(int id);
+        Task<List<CursoDetalle>?> Updatecurso(int id, CursoDetalle request);
+
     }
 }
