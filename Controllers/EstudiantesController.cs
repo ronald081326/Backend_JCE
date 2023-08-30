@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UniversidadJCE1.Models;
-using UniversidadJCE1.Services.ProfesoresService;
+using UniversidadJCE1.Services.EstudianteService;
 
 namespace UniversidadJCE1.Controllers
 {
@@ -21,25 +20,23 @@ namespace UniversidadJCE1.Controllers
             return await _estudianteService.Get();
         }
 
-        [HttpPost]
-        public async  Task<ActionResult<List<Estudiantes>>> AddEstudiante(Estudiantes  newestudiantes)
-        {
-            var estudiantes = await _estudianteService.AddEstudiante(newestudiantes);
-            return Ok(estudiantes);
-        }
-
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<Estudiantes>> GetById(int id)
+        public async Task<ActionResult<Estudiantes?>> GetSingleId(int id)
         {
-            var result = await  _estudianteService.GetById(id);
+            var result = await _estudianteService.GetSingleId(id);
             if (result is null)
                 return NotFound("Estudiante  no encontrado");
 
             return Ok(result);
         }
 
-
+        [HttpPost]
+        public async Task<ActionResult<List<Estudiantes>>> AddEstudiante(Estudiantes  estudiantes)
+        {
+            var estudiante = await _estudianteService.AddEstudiante(estudiantes);
+            return Ok(estudiante);
+        }
 
         [HttpPut("{id}")]
 
@@ -52,6 +49,5 @@ namespace UniversidadJCE1.Controllers
             return Ok(result);
 
         }
-
     }
 }  

@@ -1,15 +1,14 @@
 ﻿using UniversidadJCE1.Models;
-using UniversidadJCE1.Controllers;
-using UniversidadJCE1.Services.CursoService;
+using UniversidadJCE1.Services.CursoDetalleService;
 
-namespace UniversidadJCE1.Services.ICursoService
+namespace UniversidadJCE1.Services.CursoDetalleService
+
 {
     public interface ICursoDetalleService
     {
         Task<List<CursoDetalle>> Get();
-        Task<List<CursoDetalle>?> Addcurso(CursoDetalle cursoDetalle);
-        Task<CursoDetalle> GetById(int id);
+        Task<CursoDetalle?> GetSingleId(int id);
+        Task<List<CursoDetalle>> Addcurso(CursoDetalle cursoDetalle);
         Task<List<CursoDetalle>?> Updatecurso(int id, CursoDetalle request);
-
     }
 }

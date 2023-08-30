@@ -12,7 +12,7 @@ using UniversidadJCE1.Context;
 namespace UniversidadJCE1.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230811183427_InitialCreate")]
+    [Migration("20230824150644_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace UniversidadJCE1.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -32,9 +32,6 @@ namespace UniversidadJCE1.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CursoId"));
-
-                    b.Property<int>("CursoDetalleId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
@@ -79,10 +76,7 @@ namespace UniversidadJCE1.Migrations
             modelBuilder.Entity("UniversidadJCE1.Models.Estudiantes", b =>
                 {
                     b.Property<int>("EstudianteId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EstudianteId"));
 
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
@@ -100,8 +94,6 @@ namespace UniversidadJCE1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EstudianteId");
-
-                    b.HasIndex("CursoId");
 
                     b.ToTable("Estudiantes");
                 });
@@ -138,7 +130,7 @@ namespace UniversidadJCE1.Migrations
             modelBuilder.Entity("UniversidadJCE1.Models.CursoDetalle", b =>
                 {
                     b.HasOne("UniversidadJCE1.Models.Curso", "Curso")
-                        .WithMany("CursoDetalle")
+                        .WithMany()
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -157,8 +149,8 @@ namespace UniversidadJCE1.Migrations
             modelBuilder.Entity("UniversidadJCE1.Models.Estudiantes", b =>
                 {
                     b.HasOne("UniversidadJCE1.Models.Curso", "Curso")
-                        .WithMany("Estudiantes")
-                        .HasForeignKey("CursoId")
+                        .WithOne("Estudiantes")
+                        .HasForeignKey("UniversidadJCE1.Models.Estudiantes", "EstudianteId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -178,8 +170,6 @@ namespace UniversidadJCE1.Migrations
 
             modelBuilder.Entity("UniversidadJCE1.Models.Curso", b =>
                 {
-                    b.Navigation("CursoDetalle");
-
                     b.Navigation("Estudiantes");
 
                     b.Navigation("Profesor");

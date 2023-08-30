@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UniversidadJCE1.Models;
 using UniversidadJCE1.Services.ProfesoresService;
 
 namespace UniversidadJCE1.Controllers
@@ -9,6 +8,7 @@ namespace UniversidadJCE1.Controllers
     public class ProfesorController : ControllerBase
     {
         private readonly IProfesorService _profesoresService;
+
         public ProfesorController(IProfesorService profesoresService)
         {
             _profesoresService = profesoresService;
@@ -17,36 +17,38 @@ namespace UniversidadJCE1.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Profesor>>> Get()
         {
+        
             return await _profesoresService.Get();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<Profesor>>> AddProfesor(Profesor newProfesor)
-        {
-            var profesor = await _profesoresService.AddProfesor(newProfesor);         
-            return Ok(profesor);
-        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profesor>> GetById(int id)
+        public async Task<ActionResult<Profesor>> GetSingleId(int id)
         {
-            var Profesor = await _profesoresService.GetById(id);
+            var Profesor = await _profesoresService.GetSingleId(id);
             if (Profesor is null)
                 return NotFound("Profesor no encontrado");
 
             return Ok(Profesor);
         }
 
-        [HttpPut("{id}")]
-
-        public ActionResult<List<Profesor>> UpdateProfesor(int id, Profesor request)
+        [HttpPost]
+        public async Task<ActionResult<List<Profesor>>> AddProfesor(Profesor profesores)
         {
-            var profesor = _profesoresService.UpdateProfesor(id, request);
-            if (profesor is null)
-                return NotFound("Estudiante no actualizado.");
-
+            var profesor = await _profesoresService.AddProfesor(profesores);
             return Ok(profesor);
         }
 
+
+        [HttpPut("{id}")]
+
+        public async Task<ActionResult<List<Profesor>?>> UpdateProfesor(int id, Profesor request)
+        {
+            var profesor = await _profesoresService.UpdateProfesor(id, request);
+            if (profesor is null)
+                return NotFound("Profesor no encontrado.");
+
+            return Ok(profesor);
+        }
     }
 }

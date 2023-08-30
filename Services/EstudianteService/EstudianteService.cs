@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Context;
-using UniversidadJCE1.Models;
+﻿using UniversidadJCE1.Models;
+using UniversidadJCE1.Services.EstudianteService;
 
-namespace UniversidadJCE1.Services.ProfesoresService
-{  
-        public class EstudianteService : IEstudianteService
-        {
+
+namespace UniversidadJCE1.Services.EstudianteService
+{
+    public class EstudianteService : IEstudianteService
+    {
+
         private readonly DataContext _context;
 
         public EstudianteService(DataContext context)
@@ -13,28 +14,28 @@ namespace UniversidadJCE1.Services.ProfesoresService
             _context = context;
         }
 
-        public async Task<List<Estudiantes>> AddEstudiante(Estudiantes estudiantes)
-        {
-            _context.Estudiantes.Add(estudiantes);
-            await _context.SaveChangesAsync();
-            return await _context.Estudiantes.ToListAsync();
-        }
-
         public async Task<List<Estudiantes>> Get()
         {
-            var students = await _context.Estudiantes.ToListAsync();
-            return students;
+            var estudiantes = await _context.Estudiantes.ToListAsync();
+            return estudiantes;
         }
 
-        public async Task<Estudiantes?> GetById(int id)
+        public async Task<Estudiantes?> GetSingleId(int id)
         {
             var students = await _context.Estudiantes.FindAsync(id);
             if (students is null)
                 return null;
 
-            return students;
+            return(students);
         }
 
+        public async Task<List<Estudiantes>> AddEstudiante(Estudiantes estudiantes)
+        {
+            _context.Estudiantes.Add(estudiantes);
+            await _context.SaveChangesAsync();
+            return await _context.Estudiantes.ToListAsync();
+
+        }
 
         public async Task<List<Estudiantes>?> UpdateEstudiante(int id,Estudiantes request)
         {
@@ -42,10 +43,11 @@ namespace UniversidadJCE1.Services.ProfesoresService
             if (student is null)
                 return null;
 
+
             student.Nombre = request.Nombre;
             student.Apellido = request.Apellido;
             student.Activo = request.Activo;
-            student.FechaNacimiento = request.FechaNacimiento;
+           
 
             await _context.SaveChangesAsync();                    
 

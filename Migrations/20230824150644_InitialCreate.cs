@@ -20,7 +20,6 @@ namespace UniversidadJCE1.Migrations
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProfesorId = table.Column<int>(type: "int", nullable: false),
-                    CursoDetalleId = table.Column<int>(type: "int", nullable: false),
                     EstudianteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -32,8 +31,7 @@ namespace UniversidadJCE1.Migrations
                 name: "Estudiantes",
                 columns: table => new
                 {
-                    EstudianteId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EstudianteId = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Apellido = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -44,8 +42,8 @@ namespace UniversidadJCE1.Migrations
                 {
                     table.PrimaryKey("PK_Estudiantes", x => x.EstudianteId);
                     table.ForeignKey(
-                        name: "FK_Estudiantes_Cursos_CursoId",
-                        column: x => x.CursoId,
+                        name: "FK_Estudiantes_Cursos_EstudianteId",
+                        column: x => x.EstudianteId,
                         principalTable: "Cursos",
                         principalColumn: "CursoId",
                         onDelete: ReferentialAction.Restrict);
@@ -108,11 +106,6 @@ namespace UniversidadJCE1.Migrations
                 name: "IX_CursoDetalles_EstudianteId",
                 table: "CursoDetalles",
                 column: "EstudianteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Estudiantes_CursoId",
-                table: "Estudiantes",
-                column: "CursoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profesores_CursoId",

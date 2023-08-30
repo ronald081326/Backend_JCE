@@ -1,14 +1,14 @@
 ﻿using UniversidadJCE1.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace UniversidadJCE1.Dto
 {
     public class ProfesoresDto
     {
-        public int ProfesorId { get; set; }
-        public string? Nombre { get; set; }
-        public string? Apellido { get; set; }
-        public bool Activo { get; set; }
+        public string? Nombre { get; set; } = string.Empty;
+        public string? Apellido { get; set; } = string.Empty;
+        public bool Activo { get; set; } = false;
         
     }
 }

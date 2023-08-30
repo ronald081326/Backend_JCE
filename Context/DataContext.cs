@@ -1,12 +1,12 @@
 ﻿global using Microsoft.EntityFrameworkCore;
+using UniversidadJCE1.Migrations;
 using UniversidadJCE1.Models;
 
 namespace UniversidadJCE1.Context;
 
 public class DataContext : DbContext
 {
-    private const string ConnectionString = "Initial Catalog=UniversidadJdb;Server=LDEVELOPER24\\SQLEXPRESS;User=JCE\\Dostin_Santana;Encrypt=False;";
-                                            
+    private const string ConnectionString = "server=LDEVELOPER24\\SQLEXPRESS;Database=Universidad1JCEdb;User=JCE\\Dostin_Santana;Trusted_connection=true;TrustServerCertificate=true;";
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
 
@@ -20,13 +20,12 @@ public class DataContext : DbContext
             .HasForeignKey<Profesor>(p => p.CursoId)
             .HasPrincipalKey<Curso>(c => c.CursoId);
 
-        modelBuilder.Entity<Curso>()
-                    .HasMany(c => c.Estudiantes)
-                    .WithOne(e => e.Curso)
-                    .HasForeignKey(e => e.CursoId)
-                    .HasPrincipalKey(c => c.CursoId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
+        _ = modelBuilder.Entity<Curso>()
+          .HasOne(c => c.Estudiantes)
+          .WithOne(e => e.Curso)
+            .HasForeignKey<Estudiantes>(p => p.EstudianteId)
+           //.HasPrincipalKey(c => c.ProfesorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 
@@ -34,12 +33,10 @@ public class DataContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseSqlServer(ConnectionString);
-        
-
     }
 
+    public DbSet<Curso> Cursos { get; set; }
     public DbSet<Profesor> Profesores { get; set; }
     public DbSet<Estudiantes> Estudiantes { get; set; }
     public DbSet<CursoDetalle> CursoDetalles { get; set; }
-    public DbSet<Curso> Cursos { get; set; }
 }

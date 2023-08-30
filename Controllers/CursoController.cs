@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UniversidadJCE1.Models;
 using UniversidadJCE1.Services.CursoService;
 
 namespace UniversidadJCE1.Controllers
@@ -10,7 +9,7 @@ namespace UniversidadJCE1.Controllers
     {
         private readonly ICursoService _CursoService;
 
-        public CursoController( ICursoService cursoService)
+        public CursoController(ICursoService cursoService)
         {
             _CursoService = cursoService;
         }
@@ -21,21 +20,21 @@ namespace UniversidadJCE1.Controllers
             return await _CursoService.Get();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<Curso>>> AddcursoAsync(Curso cursos)
-        {
-            var curso = await _CursoService.Addcurso(cursos);
-            return Ok(curso);
-        }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<Curso>> GetById(int id)
+        public async Task<ActionResult<Curso>> GetSingleId(int id)
         {
-            var cursos = await _CursoService.GetById(id);
+            var cursos = await _CursoService.GetSingleId(id);
             if (cursos is null)
                 return NotFound("Curso no encontrado.");
 
             return Ok(cursos);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Curso>>> Addcurso(Curso curso)
+        {
+            var cursito = await _CursoService.Addcurso(curso);
+            return Ok(cursito);
         }
 
         [HttpPut("{id}")]

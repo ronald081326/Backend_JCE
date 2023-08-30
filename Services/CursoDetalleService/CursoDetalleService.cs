@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Context;
-using UniversidadJCE1.Models;
-using UniversidadJCE1.Services.ICursoService;
+﻿using UniversidadJCE1.Models;
+using UniversidadJCE1.Services.CursoDetalleService;
 
 namespace UniversidadJCE1.Services.CursoDetalleService
 {
     public class CursoDetalleService : ICursoDetalleService
     {
+
        private readonly DataContext _context;
 
         public CursoDetalleService(DataContext context)
@@ -14,20 +13,20 @@ namespace UniversidadJCE1.Services.CursoDetalleService
             _context = context;
         }
 
-        public async Task<List<CursoDetalle>?> Addcurso(CursoDetalle cursoDetalle)
+        public async Task<List<CursoDetalle>> Get()
+        {
+            var cursoDetalles = await _context.CursoDetalles.ToListAsync();
+            return cursoDetalles;
+        }
+
+        public async Task<List<CursoDetalle>> Addcurso(CursoDetalle cursoDetalle)
         {
             _context.CursoDetalles.Add(cursoDetalle);
             await _context.SaveChangesAsync();
             return await _context.CursoDetalles.ToListAsync();
         }
 
-        public async Task<List<CursoDetalle>> Get()
-        {
-            var cursoDetalle = await _context.CursoDetalles.ToListAsync();
-            return cursoDetalle;
-        }
-
-        public async Task<CursoDetalle?> GetById(int id)
+        public async Task<CursoDetalle?> GetSingleId(int id)
         {
             var cursoDetalle = await _context.CursoDetalles.FindAsync(id);
             if (cursoDetalle is null)
