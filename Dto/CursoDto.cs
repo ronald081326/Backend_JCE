@@ -1,13 +1,16 @@
-﻿using UniversidadJCE1.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace UniversidadJCE1.Dto
+namespace BackendApi.Dto
 {
     public class CursoDto
     {
-        [Key]
-        public string? Descripcion { get; set; }
-        public int ProfesorId { get; set; }
+        public int IdCurso { get; set; }
+        public string Descripcion { get; set; }
+        public DateTime Fecha { get; set; }
+
+        public int IdProfesor { get; set; }
+
+
     }
 }

@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\UniversidadJCE1.props" />
-</Project>

@@ -1,55 +1,72 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using UniversidadJCE1.Services.CursoService;
+﻿using BackendApi.Dto;
+using Microsoft.AspNetCore.Mvc;
 
-namespace UniversidadJCE1.Controllers
+[Route("api/curso")]
+[ApiController]
+public class CursoController : ControllerBase
 {
-    [Route("Curso")]
-    [ApiController]
-    public class CursoController : ControllerBase
+    private readonly ICursoService _cursoService;
+
+    public CursoController(ICursoService cursoService)
     {
-        private readonly ICursoService _CursoService;
-
-        public CursoController(ICursoService cursoService)
-        {
-            _CursoService = cursoService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<Curso>>> Get()
-        {
-            return await _CursoService.Get();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Curso>> GetSingleId(int id)
-        {
-            var cursos = await _CursoService.GetSingleId(id);
-            if (cursos is null)
-                return NotFound("Curso no encontrado.");
-
-            return Ok(cursos);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<List<Curso>>> Addcurso(Curso curso)
-        {
-            var cursito = await _CursoService.Addcurso(curso);
-            return Ok(cursito);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<List<Curso>>> Updatecurso(int id, Curso request)
-        {
-            var cursos = await _CursoService.Updatecurso(id, request);
-            if (cursos is null)
-                return NotFound("Curso No encontrado.");
-
-            return Ok(cursos);
-
-        }
+        _cursoService = cursoService;
     }
+
+    [HttpPost]
+    public IActionResult CrearCurso([FromBody] CursoDto cursoDto)
+    {
+        if(cursoDto.IdCurso != 0)
+        {
+            _cursoService.UpdateCurso(cursoDto.IdCurso, cursoDto.Descripcion, cursoDto.Fecha, cursoDto.IdProfesor);
+
+            return Ok("Curso actualizado correctamente");
+
+        }
+        else
+        {
+            _cursoService.CreateCurso(cursoDto.Descripcion, cursoDto.Fecha, cursoDto.IdProfesor);
+
+            return Ok("Curso creado correctamente");
+
+        }
+
+    }
+
+    [HttpGet]
+    public IActionResult ObtenerCursos()
+    {
+        var cursos = _cursoService.GetCursos();
+        return Ok(cursos);
+    }
+
+    [HttpGet("{idCurso}")]
+    public IActionResult ObtenerCursoPorId(int idCurso)
+    {
+        var curso = _cursoService.GetByIdCurso(idCurso);
+        if (curso == null)
+        {
+            return NotFound();
+        }
+        return Ok(curso);
+    }
+
+    [HttpGet("estudiantesporcurso/{idCurso}")]
+    public IActionResult ObtenerEstudiantePorCurso(int idCurso)
+    {
+        var estudiantes = _cursoService.GetByIdCursoListaEstudiantes(idCurso);
+        if (estudiantes.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(estudiantes);
+    }
+
+  
+    [HttpGet("cursosdisponibles")]
+    public ActionResult<IEnumerable<Curso>> GetCursosSinProfesor()
+    {
+        var cursosSinProfesor = _cursoService.ObtenerCursosSinProfesor();
+        return Ok(cursosSinProfesor);
+    }
+
 }
-
-
-
-

@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using UniversidadJCE1.Models;
+﻿/*using System.ComponentModel.DataAnnotations;
 
-namespace UniversidadJCE1.Models
+namespace BackendApi.Models
 {
     public class CursoDetalle
     {
+
         [Key]
-        public int CursoDetalleId { get; set; }
-        public Curso? Curso { get; set; }
-        public int CursoId { get; set; }
-        public Estudiantes? Estudiante { get; set; }
-        public int EstudianteId { get; set; }
+        public int Id { get; set; }
+        public int EstudianteId { get; set; } // Clave foránea para el estudiante
+        public int CursoId { get; set; } // Clave foránea para el curso
+        public Estudiante Estudiante { get; set; } // Propiedad de navegación al estudiante
+        public Curso Curso { get; set; } // Pr
+
     }
-}
+}*/

@@ -1,20 +1,22 @@
-﻿using UniversidadJCE1.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-
-namespace UniversidadJCE1.Models
+namespace BackendApi.Models
 {
     public class Curso
     {
-
         [Key]
-        public int CursoId { get; set; }
-        public string? Descripcion { get; set; }
+        public int IdCurso { get; set; }
+        public string Descripcion { get; set; }
+
         public DateTime Fecha { get; set; }
+
+        public int? ProfesorId { get; set; }
         public Profesor? Profesor { get; set; }
-        public int ProfesorId { get; set; }
-        public Estudiantes? Estudiantes { get; set; }   
-        public int EstudianteId { get; set; }
+
+        [JsonIgnore]
+        public List<Estudiante>? Estudiantes { get; set; }
 
     }
 }

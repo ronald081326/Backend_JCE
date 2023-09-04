@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "afAA657x5fHrFaB5m2Mm4iZAbR0rCgVj6s0hnnZMDbg=",
-  "Source": "UniversidadJCE1",
-  "BasePath": "_content/UniversidadJCE1",
+  "Hash": "ZLePv7IYGJMbtUS4H4vpkS6jLtPIXtLdvgrpZoKc154=",
+  "Source": "BackendApi",
+  "BasePath": "_content/BackendApi",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

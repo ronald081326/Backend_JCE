@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Models;
 
 namespace UniversidadJCE1.Dto
 {

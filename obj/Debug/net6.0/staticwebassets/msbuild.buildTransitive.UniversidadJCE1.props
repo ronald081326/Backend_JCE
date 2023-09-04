@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\UniversidadJCE1.props" />
-</Project>

@@ -1,12 +1,11 @@
 ﻿global using Microsoft.EntityFrameworkCore;
-using UniversidadJCE1.Migrations;
-using UniversidadJCE1.Models;
+using BackendApi.Models;
 
-namespace UniversidadJCE1.Context;
+namespace BackendApi.Context;
 
 public class DataContext : DbContext
 {
-    private const string ConnectionString = "server=LDEVELOPER24\\SQLEXPRESS;Database=Universidad1JCEdb;User=JCE\\Dostin_Santana;Trusted_connection=true;TrustServerCertificate=true;";
+    private const string ConnectionString = "server=DESKTOP-7EH32N5\\SQLEXPRESS;Database=UNIVERSIDAD; Integrated Security=true; TrustServerCertificate=true;";
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
 
@@ -14,19 +13,18 @@ public class DataContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Profesor>()
+         .HasMany(p => p.Cursos) // Un profesor tiene muchos cursos
+         .WithOne(c => c.Profesor) // Un curso pertenece a un profesor
+         .HasForeignKey(c => c.ProfesorId);
+
         modelBuilder.Entity<Curso>()
-            .HasOne(c => c.Profesor)
-            .WithOne(p => p.Curso)
-            .HasForeignKey<Profesor>(p => p.CursoId)
-            .HasPrincipalKey<Curso>(c => c.CursoId);
+        .HasMany(c => c.Estudiantes) // Un curso tiene muchos estudiantes
+        .WithOne(e => e.Curso) // Un estudiante pertenece a un curso
+        .HasForeignKey(e => e.CursoId);
 
-        _ = modelBuilder.Entity<Curso>()
-          .HasOne(c => c.Estudiantes)
-          .WithOne(e => e.Curso)
-            .HasForeignKey<Estudiantes>(p => p.EstudianteId)
-           //.HasPrincipalKey(c => c.ProfesorId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+        // Call the base OnModelCreating to apply any other configurations
+        base.OnModelCreating(modelBuilder);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,9 +32,10 @@ public class DataContext : DbContext
         base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseSqlServer(ConnectionString);
     }
-
-    public DbSet<Curso> Cursos { get; set; }
     public DbSet<Profesor> Profesores { get; set; }
-    public DbSet<Estudiantes> Estudiantes { get; set; }
-    public DbSet<CursoDetalle> CursoDetalles { get; set; }
+    public DbSet<Curso> Cursos { get; set; }
+
+    public DbSet<Estudiante> Estudiantes { get; set; }
+
+
 }
